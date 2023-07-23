@@ -12,6 +12,8 @@ function App() {
     {rowNumber:4,rowDescription:'Charge phone battery',rowAssigned:'User One'},
   ])
 
+  const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+
   const addTodo = (description, assigned) => {
     let rowNumber = 0;
     if(todos.length > 0){
@@ -27,6 +29,13 @@ function App() {
       setTodos(todos => [...todos,newToDo])
   }
 
+  const deleteTodo = (deleteTodoRowNumber) => {
+    let filtered = todos.filter(function (value){
+    return value.rowNumber !== deleteTodoRowNumber;
+    })
+    setTodos(filtered);
+  }
+
   return (
     <div className='mt-5 container'>
       <div className='card'>
@@ -35,13 +44,15 @@ function App() {
         </div>
         <div className='card-body'>
           
-          <TodoTable todos={todos}/>
+          <TodoTable todos={todos} deleteTodo={deleteTodo}/>
 
-          <button className='btn btn-primary' onClick={addTodo}>
-            Add new todo
+          <button onClick={()=>{setShowAddTodoForm(!showAddTodoForm)}} className='btn btn-primary' >
+            {showAddTodoForm ? 'Close New Todo' : 'New Todo'}
           </button>
-
-          <NewTodoForm addTodo={addTodo}/>
+          {
+            showAddTodoForm &&
+            <NewTodoForm addTodo={addTodo}/> 
+          }
         </div>
       </div>
     </div>
